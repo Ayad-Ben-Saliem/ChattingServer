@@ -20,22 +20,21 @@ public class Session {
 
     public void start(){
 
-        try {
-            Scanner scanner1 = new Scanner(user1.getSocket().getInputStream());
-            PrintStream printer1 = new PrintStream(user1.getSocket().getOutputStream());
+        ChattingSession session1 = new ChattingSession(user1, user2);
+        ChattingSession session2 = new ChattingSession(user2, user1);
 
-            Scanner scanner2 = new Scanner(user2.getSocket().getInputStream());
-            PrintStream printer2 = new PrintStream(user2.getSocket().getOutputStream());
+        session1.addOnCloseSessionListener(() -> stopSession(session2));
+        session2.addOnCloseSessionListener(() -> stopSession(session1));
 
-            ChattingSession session1 = new ChattingSession(scanner1, printer2);
-            ChattingSession session2 = new ChattingSession(scanner2, printer1);
-
-            session1.start();
-            session2.start();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        session1.start();
+        session2.start();
     }
 
+    private void stopSession(ChattingSession session){
+        if(session.isRunning()) {
+            session.stopSession();
+            user1.startRequestListener();
+            user2.startRequestListener();
+        }
+    }
 }

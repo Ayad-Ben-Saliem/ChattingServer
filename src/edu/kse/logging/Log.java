@@ -2,10 +2,59 @@ package edu.kse.logging;
 
 public class Log {
 
-    public static boolean debug = false;
+    private volatile static boolean info = false;
+    private volatile static boolean debug = false;
+    private volatile static boolean error = false;
+    private volatile static boolean warning = false;
+
+    public synchronized static void enableInfo(){
+        info = true;
+    }
+    public synchronized static void enableError(){
+        error = true;
+    }
+    public synchronized static void enableWarning(){
+        warning = true;
+    }
+    public synchronized static void enableDebug(){
+        debug = true;
+    }
+
+    public synchronized static void disableInfo(){
+        info = false;
+    }
+
+    public synchronized static void disableError(){
+        error = false;
+    }
+
+
+    public synchronized static void disableWarning(){
+        warning = false;
+    }
+
+
+    public synchronized static void disableDebug(){
+        debug = false;
+    }
+
+
+    public synchronized static void enable(){
+        enableInfo();
+        enableError();
+        enableDebug();
+        enableWarning();
+    }
+
+    public synchronized static void disable(){
+        disableInfo();
+        disableError();
+        disableDebug();
+        disableWarning();
+    }
 
     public static void i(Object ...objects){
-        if (debug) {
+        if (info) {
             System.out.print(Colors.BLUE);
             print(objects);
             System.out.print(Colors.RESET);
