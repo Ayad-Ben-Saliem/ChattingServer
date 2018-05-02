@@ -70,6 +70,7 @@ public class User {
         return address;
     }
 
+
     private List<OnRequestListener> getOnRequestListeners() {
         return onRequestListeners;
     }
